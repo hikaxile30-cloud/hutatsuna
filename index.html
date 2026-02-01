@@ -2,21 +2,27 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>漫画風・二つ名診断</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>真・二つ名診断</title>
     <style>
-        body { font-family: 'Hiragino Mincho ProN', serif; background: #1a1a1a; color: #eee; text-align: center; padding: 50px; }
-        .container { max-width: 600px; margin: auto; background: #2a2a2a; padding: 30px; border-radius: 15px; border: 2px solid #444; }
-        button { background: #d4af37; border: none; padding: 10px 20px; font-size: 18px; cursor: pointer; border-radius: 5px; margin: 10px; transition: 0.3s; }
-        button:hover { background: #fff; color: #000; }
-        .result { font-size: 32px; color: #ff4500; font-weight: bold; margin-top: 20px; text-shadow: 2px 2px 4px #000; }
+        /* 文字を大きく、スマホでも見やすく調整 */
+        body { font-family: 'Hiragino Mincho ProN', serif; background: #0d0d0d; color: #fff; text-align: center; padding: 20px; margin: 0; }
+        .container { max-width: 90%; margin: 20px auto; background: #1a1a1a; padding: 40px 20px; border-radius: 20px; border: 3px solid #d4af37; box-shadow: 0 0 20px rgba(212,175,55,0.3); }
+        h1 { font-size: 28px; color: #d4af37; margin-bottom: 30px; letter-spacing: 2px; }
+        #question-text { font-size: 22px; font-weight: bold; margin-bottom: 30px; line-height: 1.5; min-height: 60px; }
+        button { background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%); border: none; padding: 18px 25px; font-size: 18px; color: #000; font-weight: bold; cursor: pointer; border-radius: 50px; margin: 10px auto; display: block; width: 100%; max-width: 300px; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        button:active { transform: scale(0.95); }
+        .result-label { font-size: 20px; color: #aaa; margin-bottom: 10px; }
+        /* 結果表示を巨大化 */
+        .result { font-size: 40px; color: #ff4500; font-weight: bold; margin-top: 20px; text-shadow: 0 0 15px #ff4500; line-height: 1.2; }
     </style>
 </head>
 <body>
 
 <div class="container" id="app">
-    <h1>⚔️ 二つ名診断 ⚔️</h1>
+    <h1>⚔️ 真・二つ名診断 ⚔️</h1>
     <div id="question-area">
-        <p id="question-text">準備はいいか…？</p>
+        <p id="question-text">汝の魂の銘（二つ名）を刻む準備はいいか…？</p>
         <div id="answer-buttons">
             <button onclick="start()">診断を開始する</button>
         </div>
@@ -25,16 +31,16 @@
 
 <script>
     const questions = [
-        { q: "イメージカラーは？", a: [{t:"赤", p:"fire"}, {t:"黒", p:"dark"}, {t:"銀", p:"cool"}, {t:"金", p:"holy"}] },
-        { q: "戦い方は？", a: [{t:"正面突破", p:"warrior"}, {t:"影から", p:"shadow"}, {t:"罠・計算", p:"smart"}, {t:"圧倒的力", p:"god"}] },
-        { q: "守りたいものは？", a: [{t:"己の誇り", p:"pride"}, {t:"仲間", p:"friend"}, {t:"秩序", p:"law"}, {t:"壊したい", p:"chaos"}] },
-        { q: "周囲からの印象は？", a: [{t:"熱血", p:"fire"}, {t:"冷静", p:"cool"}, {t:"変人", p:"chaos"}, {t:"リーダー", p:"king"}] },
-        { q: "武器に名をつけるなら？", a: [{t:"〇〇を喰らう牙", p:"beast"}, {t:"虚無を裂く剣", p:"cool"}, {t:"神を穿つ銃", p:"future"}, {t:"持たない", p:"god"}] },
-        { q: "好きな漢字は？", a: [{t:"剛・覇", p:"warrior"}, {t:"零・幻", p:"shadow"}, {t:"聖・皇", p:"holy"}, {t:"獄・死", p:"dark"}] },
-        { q: "「伝説」と呼ばれたら？", a: [{t:"嬉しい", p:"king"}, {t:"忘れてほしい", p:"cool"}, {t:"相応しくありたい", p:"law"}, {t:"嘲笑う", p:"chaos"}] },
-        { q: "休日の過ごし方は？", a: [{t:"体を動かす", p:"warrior"}, {t:"静かに思索", p:"smart"}] },
-        { q: "恐れているものは？", a: [{t:"弱くなること", p:"pride"}, {t:"退屈", p:"chaos"}, {t:"裏切り", p:"dark"}, {t:"忘却", p:"shadow"}] },
-        { q: "二つ名のスタイルは？", a: [{t:"漢字のみ", p:"kanji"}, {t:"カタカナ混じり", p:"mix"}] }
+        { q: "直感で選ぶイメージカラーは？", a: [{t:"灼熱の赤", p:"fire"}, {t:"静寂の蒼", p:"cool"}, {t:"深淵の黒", p:"dark"}, {t:"光輝の金", p:"holy"}] },
+        { q: "好む戦法は？", a: [{t:"一撃必殺の武力", p:"warrior"}, {t:"変幻自在の影", p:"shadow"}, {t:"冷徹な知略", p:"smart"}, {t:"神速の速さ", p:"cool"}] },
+        { q: "守るべきものは？", a: [{t:"己のプライド", p:"pride"}, {t:"愛する仲間", p:"friend"}, {t:"世界の法", p:"law"}, {t:"何もいらぬ", p:"chaos"}] },
+        { q: "他人からどう見られたい？", a: [{t:"圧倒的強者", p:"king"}, {t:"冷徹なエリート", p:"cool"}, {t:"予測不能な狂気", p:"chaos"}, {t:"慈悲深き賢者", p:"holy"}] },
+        { q: "武器の二つ名は？", a: [{t:"竜を喰らう者", p:"beast"}, {t:"空を裂く風", p:"cool"}, {t:"悪を断つ刃", p:"warrior"}, {t:"魂を吸う器", p:"dark"}] },
+        { q: "好きな言葉の響きは？", a: [{t:"覇王・無双", p:"king"}, {t:"零・刹那", p:"cool"}, {t:"反逆・混沌", p:"chaos"}, {t:"天命・福音", p:"holy"}] },
+        { q: "伝説に刻まれるなら？", a: [{t:"最強の証として", p:"king"}, {t:"影の功労者として", p:"shadow"}, {t:"恐るべき災厄として", p:"dark"}, {t:"平和の象徴として", p:"law"}] },
+        { q: "内なる感情は？", a: [{t:"燃え盛る情熱", p:"fire"}, {t:"凍てつく孤独", p:"cool"}, {t:"煮え繰る怒り", p:"chaos"}, {t:"澄み渡る静寂", p:"smart"}] },
+        { q: "もし敗北したら？", a: [{t:"再起を誓う", p:"pride"}, {t:"死を受け入れる", p:"dark"}, {t:"道連れにする", p:"chaos"}, {t:"敗北はありえない", p:"god"}] },
+        { q: "二つ名のスタイルは？", a: [{t:"重厚な【漢字】", p:"kanji"}, {t:"響く【カタカナ】", p:"mix"}] }
     ];
 
     let currentQ = 0;
@@ -42,13 +48,13 @@
 
     function start() {
         currentQ = 0;
-        scores = {};
+        scores = { fire:0, cool:0, dark:0, holy:0, warrior:0, shadow:0, smart:0, king:0, chaos:0, god:0, pride:0, law:0, mix:0 };
         showQuestion();
     }
 
     function showQuestion() {
         const q = questions[currentQ];
-        document.getElementById('question-text').innerText = `第${currentQ + 1}問: ${q.q}`;
+        document.getElementById('question-text').innerText = `${currentQ + 1}/10：${q.q}`;
         const btns = document.getElementById('answer-buttons');
         btns.innerHTML = '';
         q.a.forEach(ans => {
@@ -60,7 +66,7 @@
     }
 
     function next(p) {
-        scores[p] = (scores[p] || 0) + 1;
+        scores[p]++;
         currentQ++;
         if (currentQ < questions.length) {
             showQuestion();
@@ -70,36 +76,41 @@
     }
 
     function showResult() {
-        // スコアから属性を決定（一番多いやつ）
-        const topType = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        // スコア集計ロジックを強化（必ず何か選ばれるように）
+        const keys = Object.keys(scores).filter(k => k !== 'mix' && k !== 'kanji');
+        const topType = keys.reduce((a, b) => scores[a] >= scores[b] ? a : b);
         
-        const first = {
-            fire: ["紅蓮の", "爆炎の"], dark: ["深淵の", "宵闇の"], holy: ["黄金の", "天上の"],
-            shadow: ["幻影の", "無慈悲な"], warrior: ["不滅の", "鉄血の"], smart: ["虚構の", "深慮の"],
-            king: ["覇道の", "至高の"], chaos: ["狂乱の", "終焉の"], god: ["神殺しの", "絶対的な"]
+        // バリエーション大幅増量
+        const firstWords = {
+            fire: ["灼熱の", "紅蓮の", "猛り狂う", "獄炎の", "焦土の"],
+            cool: ["凍てつく", "氷結の", "銀世界の", "静寂なる", "極北の"],
+            dark: ["宵闇の", "奈落の", "深淵なる", "漆黒の", "忌まわしき"],
+            holy: ["黄金の", "天上の", "聖なる", "眩き", "至高の"],
+            warrior: ["鋼の", "不滅の", "鉄血の", "無双の", "荒ぶる"],
+            shadow: ["幻影の", "朧月の", "暗闇の", "姿なき", "瞬きの一閃"],
+            smart: ["虚構の", "深慮の", "真理を暴く", "冷徹なる", "神の頭脳を持つ"],
+            king: ["覇道の", "独裁の", "王冠なき", "絶対権力の", "唯一無二の"],
+            chaos: ["狂乱の", "終焉の", "混沌なる", "厄災の", "滅びを呼ぶ"],
+            god: ["神殺しの", "超絶の", "次元を超越せし", "全知全能の", "万物の支配者"]
         };
 
         const second_kanji = {
-            fire: "猛虎", dark: "死神", holy: "聖者", shadow: "暗殺者",
-            warrior: "騎士", smart: "賢者", king: "支配者", chaos: "破壊神", god: "裁定者"
+            fire: "焔龍", cool: "氷狼", dark: "死神", holy: "聖者", warrior: "騎士",
+            shadow: "忍鬼", smart: "魔術師", king: "皇帝", chaos: "破壊神", god: "守護神"
         };
 
         const second_mix = {
-            fire: "プロメテウス", dark: "デストロイヤー", holy: "パラディン", shadow: "シャドウウォーカー",
-            warrior: "バーサーカー", smart: "マスターマインド", king: "オーバーロード", chaos: "アバドン", god: "ゼウス"
+            fire: "イフリート", cool: "ジャックフロスト", dark: "デストロイヤー", holy: "パラディン", warrior: "ウォーリアー",
+            shadow: "アサシン", smart: "マスターマインド", king: "オーバーロード", chaos: "アバドン", god: "イモータル"
         };
 
-        let title = first[topType][Math.floor(Math.random()*2)];
-        if (scores['mix'] > 0) {
-            title += second_mix[topType];
-        } else {
-            title += second_kanji[topType];
-        }
+        let prefix = firstWords[topType][Math.floor(Math.random() * firstWords[topType].length)];
+        let suffix = (scores['mix'] > 0) ? second_mix[topType] : second_kanji[topType];
 
         document.getElementById('question-area').innerHTML = `
-            <h2>あなたの二つ名は…</h2>
-            <div class="result">【 ${title} 】</div>
-            <button onclick="start()">もう一度診断する</button>
+            <div class="result-label">貴様の魂に刻まれし名は…</div>
+            <div class="result">【 ${prefix}${suffix} 】</div>
+            <button style="margin-top:40px;" onclick="start()">運命を再構築する</button>
         `;
     }
 </script>

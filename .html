@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>漫画風・二つ名診断</title>
+    <style>
+        body { font-family: 'Hiragino Mincho ProN', serif; background: #1a1a1a; color: #eee; text-align: center; padding: 50px; }
+        .container { max-width: 600px; margin: auto; background: #2a2a2a; padding: 30px; border-radius: 15px; border: 2px solid #444; }
+        button { background: #d4af37; border: none; padding: 10px 20px; font-size: 18px; cursor: pointer; border-radius: 5px; margin: 10px; transition: 0.3s; }
+        button:hover { background: #fff; color: #000; }
+        .result { font-size: 32px; color: #ff4500; font-weight: bold; margin-top: 20px; text-shadow: 2px 2px 4px #000; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="app">
+    <h1>⚔️ 漫画風・二つ名診断 ⚔️</h1>
+    <div id="question-area">
+        <p id="question-text">準備はいいか…？</p>
+        <div id="answer-buttons">
+            <button onclick="start()">診断を開始する</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "イメージカラーは？", a: [{t:"赤", p:"fire"}, {t:"黒", p:"dark"}, {t:"銀", p:"cool"}, {t:"金", p:"holy"}] },
+        { q: "戦い方は？", a: [{t:"正面突破", p:"warrior"}, {t:"影から", p:"shadow"}, {t:"罠・計算", p:"smart"}, {t:"圧倒的力", p:"god"}] },
+        { q: "守りたいものは？", a: [{t:"己の誇り", p:"pride"}, {t:"仲間", p:"friend"}, {t:"秩序", p:"law"}, {t:"壊したい", p:"chaos"}] },
+        { q: "周囲からの印象は？", a: [{t:"熱血", p:"fire"}, {t:"冷静", p:"cool"}, {t:"変人", p:"chaos"}, {t:"リーダー", p:"king"}] },
+        { q: "武器に名をつけるなら？", a: [{t:"〇〇を喰らう牙", p:"beast"}, {t:"虚無を裂く剣", p:"cool"}, {t:"神を穿つ銃", p:"future"}, {t:"持たない", p:"god"}] },
+        { q: "好きな漢字は？", a: [{t:"剛・覇", p:"warrior"}, {t:"零・幻", p:"shadow"}, {t:"聖・皇", p:"holy"}, {t:"獄・死", p:"dark"}] },
+        { q: "「伝説」と呼ばれたら？", a: [{t:"嬉しい", p:"king"}, {t:"忘れてほしい", p:"cool"}, {t:"相応しくありたい", p:"law"}, {t:"嘲笑う", p:"chaos"}] },
+        { q: "休日の過ごし方は？", a: [{t:"体を動かす", p:"warrior"}, {t:"静かに思索", p:"smart"}] },
+        { q: "恐れているものは？", a: [{t:"弱くなること", p:"pride"}, {t:"退屈", p:"chaos"}, {t:"裏切り", p:"dark"}, {t:"忘却", p:"shadow"}] },
+        { q: "二つ名のスタイルは？", a: [{t:"漢字のみ", p:"kanji"}, {t:"カタカナ混じり", p:"mix"}] }
+    ];
+
+    let currentQ = 0;
+    let scores = {};
+
+    function start() {
+        currentQ = 0;
+        scores = {};
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const q = questions[currentQ];
+        document.getElementById('question-text').innerText = `第${currentQ + 1}問: ${q.q}`;
+        const btns = document.getElementById('answer-buttons');
+        btns.innerHTML = '';
+        q.a.forEach(ans => {
+            const b = document.createElement('button');
+            b.innerText = ans.t;
+            b.onclick = () => next(ans.p);
+            btns.appendChild(b);
+        });
+    }
+
+    function next(p) {
+        scores[p] = (scores[p] || 0) + 1;
+        currentQ++;
+        if (currentQ < questions.length) {
+            showQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        // スコアから属性を決定（一番多いやつ）
+        const topType = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        
+        const first = {
+            fire: ["紅蓮の", "爆炎の"], dark: ["深淵の", "宵闇の"], holy: ["黄金の", "天上の"],
+            shadow: ["幻影の", "無慈悲な"], warrior: ["不滅の", "鉄血の"], smart: ["虚構の", "深慮の"],
+            king: ["覇道の", "至高の"], chaos: ["狂乱の", "終焉の"], god: ["神殺しの", "絶対的な"]
+        };
+
+        const second_kanji = {
+            fire: "猛虎", dark: "死神", holy: "聖者", shadow: "暗殺者",
+            warrior: "騎士", smart: "賢者", king: "支配者", chaos: "破壊神", god: "裁定者"
+        };
+
+        const second_mix = {
+            fire: "プロメテウス", dark: "デストロイヤー", holy: "パラディン", shadow: "シャドウウォーカー",
+            warrior: "バーサーカー", smart: "マスターマインド", king: "オーバーロード", chaos: "アバドン", god: "ゼウス"
+        };
+
+        let title = first[topType][Math.floor(Math.random()*2)];
+        if (scores['mix'] > 0) {
+            title += second_mix[topType];
+        } else {
+            title += second_kanji[topType];
+        }
+
+        document.getElementById('question-area').innerHTML = `
+            <h2>あなたの二つ名は…</h2>
+            <div class="result">【 ${title} 】</div>
+            <button onclick="start()">もう一度診断する</button>
+        `;
+    }
+</script>
+</body>
+</html>

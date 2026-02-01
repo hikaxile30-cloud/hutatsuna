@@ -3,48 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>現実派・二つ名覚醒診断</title>
+    <title>深層覚醒・二つ名診断</title>
     <style>
-        body { font-family: 'Hiragino Mincho ProN', serif; background: #0a0a0a; color: #fff; text-align: center; padding: 10px; margin: 0; }
-        .container { max-width: 600px; margin: 20px auto; background: #151515; padding: 40px 20px; border-radius: 15px; border: 1px solid #333; box-shadow: 0 0 30px rgba(255,255,255,0.05); }
-        h1 { font-size: 22px; color: #eee; border-bottom: 1px solid #d4af37; display: inline-block; padding-bottom: 5px; margin-bottom: 30px; }
-        #progress { font-size: 14px; color: #888; margin-bottom: 10px; }
-        #question-text { font-size: 22px; font-weight: bold; margin-bottom: 40px; line-height: 1.6; min-height: 80px; }
-        .btn-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        button { background: #fff; border: none; padding: 20px; font-size: 18px; color: #000; font-weight: bold; cursor: pointer; border-radius: 5px; transition: 0.2s; }
-        button:hover { background: #d4af37; color: #fff; }
-        .result-sub { font-size: 18px; color: #d4af37; margin-bottom: 20px; letter-spacing: 5px; }
-        .result-main { font-size: 45px; font-weight: bold; margin: 20px 0; line-height: 1.2; text-shadow: 2px 2px 10px rgba(255,255,255,0.2); }
-        .result-desc { font-size: 16px; color: #ccc; margin-top: 30px; line-height: 1.8; padding: 0 20px; }
+        body { font-family: 'Helvetica Neue', 'Hiragino Sans', 'Meiryo', sans-serif; background: #000; color: #fff; text-align: center; padding: 10px; margin: 0; }
+        .container { max-width: 600px; margin: 20px auto; background: linear-gradient(145deg, #111, #222); padding: 40px 20px; border-radius: 20px; border: 1px solid #444; }
+        h1 { font-size: 20px; color: #d4af37; letter-spacing: 4px; margin-bottom: 30px; }
+        #progress-bar { height: 4px; background: #333; margin-bottom: 20px; border-radius: 2px; }
+        #progress-fill { height: 100%; background: #d4af37; width: 0%; transition: 0.3s; }
+        #question-text { font-size: 20px; font-weight: bold; margin-bottom: 35px; min-height: 60px; line-height: 1.5; }
+        .btn-column { display: flex; flex-direction: column; gap: 12px; }
+        button { background: rgba(255,255,255,0.05); border: 1px solid #555; padding: 16px; font-size: 16px; color: #ddd; cursor: pointer; border-radius: 8px; transition: 0.2s; }
+        button:hover { background: #d4af37; color: #000; border-color: #d4af37; font-weight: bold; }
+        .result-main { font-size: 42px; color: #ff3e3e; font-weight: bold; margin: 25px 0; text-shadow: 0 0 15px rgba(255,62,62,0.5); }
+        .result-desc { font-size: 15px; color: #bbb; line-height: 1.8; text-align: left; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container" id="app">
-    <h1>⚔️ REALITY AWAKENING ⚔️</h1>
+    <h1>ANIMA REVELATION</h1>
     <div id="display-area">
-        <p id="question-text">日常に潜む汝の真価を、<br>今こそ解き放て。</p>
-        <button onclick="start()" style="width: 200px; margin: auto;">覚醒を開始する</button>
+        <p id="question-text">日常の奥底に眠る<br>もう一人の自分を呼び覚ます。</p>
+        <button onclick="start()" style="width: 200px; margin: auto; background: #d4af37; color: #000;">儀式を開始する</button>
     </div>
 </div>
 
 <script>
     const questions = [
-        { q: "休日の過ごし方はどちらに近い？", a: [{t:"外に出て活動的に動く", p:"light"}, {t:"家でゆっくり趣味に没頭", p:"dark"}] },
-        { q: "友人から相談を受けた時は？", a: [{t:"解決策を論理的に提示する", p:"smart"}, {t:"まずは共感して寄り添う", p:"holy"}] },
-        { q: "仕事や勉強に取り組むスタイルは？", a: [{t:"短期集中、爆発力でこなす", p:"fire"}, {t:"計画的に、コツコツ進める", p:"cool"}] },
-        { q: "あなたが人生で重視するものは？", a: [{t:"自由と刺激", p:"chaos"}, {t:"安定と秩序", p:"law"}] },
-        { q: "物事の決断を下すスピードは？", a: [{t:"即断即決", p:"warrior"}, {t:"慎重に吟味する", p:"shadow"}] },
-        { q: "身の回りの整理整頓は？", a: [{t:"きっちりしていないと落ち着かない", p:"law"}, {t:"多少散らかっていても気にならない", p:"chaos"}] },
-        { q: "自分の性格をひと言で言うと？", a: [{t:"情熱的・ポジティブ", p:"fire"}, {t:"冷静・マイペース", p:"cool"}] },
-        { q: "趣味にお金をかける方だ？", a: [{t:"欲しいものは迷わず買う", p:"king"}, {t:"貯金とのバランスを考える", p:"smart"}] },
-        { q: "初対面の人と話すのは？", a: [{t:"得意、自分から話しかける", p:"light"}, {t:"苦手、相手の出方を待つ", p:"shadow"}] },
-        { q: "怒りを感じた時の反応は？", a: [{t:"その場でハッキリ言う", p:"fire"}, {t:"沈黙して心の中で整理する", p:"dark"}] },
-        { q: "どちらの景色に惹かれる？", a: [{t:"賑やかな都会の夜景", p:"king"}, {t:"静かな大自然の風景", p:"holy"}] },
-        { q: "他人の評価は気になる？", a: [{t:"かなり気になる", p:"law"}, {t:"自分らしくあれば良い", p:"pride"}] },
-        { q: "ピンチの時ほど…？", a: [{t:"燃えてくる", p:"warrior"}, {t:"逃げ道を探す", p:"shadow"}] },
-        { q: "朝型？それとも夜型？", a: [{t:"朝日と共に動く朝型", p:"light"}, {t:"夜に本領を発揮する夜型", p:"dark"}] },
-        { q: "最後の質問。言葉の響きはどちらが好み？", a: [{t:"古風な漢字", p:"kanji"}, {t:"現代的なカタカナ", p:"mix"}] }
+        { q: "休日の午後の過ごし方は？", a: [{t:"外で思い切り体を動かす", p:"warrior"}, {t:"流行のスポットへ出かける", p:"light"}, {t:"カフェで読書や作業", p:"smart"}, {t:"家でゲームやアニメに没頭", p:"dark"}, {t:"特に決めずダラダラする", p:"chaos"}] },
+        { q: "他人に言われて一番嬉しいのは？", a: [{t:"「頼りになるね」", p:"law"}, {t:"「面白い人だね」", p:"chaos"}, {t:"「頭が良いね」", p:"smart"}, {t:"「優しいね」", p:"holy"}, {t:"「オーラがあるね」", p:"king"}] },
+        { q: "仕事や課題で行き詰まったら？", a: [{t:"気合で乗り切る", p:"fire"}, {t:"一度寝て忘れる", p:"chaos"}, {t:"原因を徹底的に分析する", p:"smart"}, {t:"誰かに助けを求める", p:"friend"}, {t:"黙々と一人で進める", p:"shadow"}] },
+        { q: "あなたの理想のリーダー像は？", a: [{t:"先陣を切る特攻隊長", p:"fire"}, {t:"後ろから支える軍師", p:"smart"}, {t:"圧倒的なカリスマ王者", p:"king"}, {t:"規律を守る真面目な上司", p:"law"}, {t:"自由を許す放任主義", p:"chaos"}] },
+        { q: "初対面でのあなたの立ち位置は？", a: [{t:"自分から話題を振る", p:"light"}, {t:"聞き役に徹する", p:"holy"}, {t:"少し距離を置いて観察", p:"shadow"}, {t:"愛想よく振る舞う", p:"friend"}, {t:"緊張して黙り込む", p:"dark"}] },
+        { q: "もし100万円手に入ったら？", a: [{t:"速攻で使い切る", p:"fire"}, {t:"全額投資や貯金に回す", p:"smart"}, {t:"大切な人にプレゼントを買う", p:"holy"}, {t:"欲しかった高級品を買う", p:"king"}, {t:"旅行など体験に使う", p:"light"}] },
+        { q: "怒りを感じるポイントは？", a: [{t:"理不尽なルール", p:"chaos"}, {t:"自分の邪魔をされること", p:"pride"}, {t:"大切な人を傷つけられること", p:"holy"}, {t:"嘘をつかれること", p:"law"}, {t:"期待を裏切られること", p:"dark"}] },
+        { q: "あなたの机の上はどんな状態？", a: [{t:"完璧に整理されている", p:"law"}, {t:"必要なものがすぐ出せる", p:"smart"}, {t:"カオスな状態", p:"chaos"}, {t:"好きな物で溢れている", p:"pride"}, {t:"何も置いていない", p:"shadow"}] },
+        { q: "ピンチの時のあなたの心の声は？", a: [{t:"「やってやるぜ！」", p:"fire"}, {t:"「なんとかなるさ」", p:"chaos"}, {t:"「最善の策は？」", p:"smart"}, {t:"「助けて…」", p:"friend"}, {t:"「計算通りだ」", p:"shadow"}] },
+        { q: "好きな映画や漫画のジャンルは？", a: [{t:"王道アクション", p:"fire"}, {t:"サスペンス・ミステリー", p:"shadow"}, {t:"感動・ヒューマンドラマ", p:"holy"}, {t:"壮大なファンタジー", p:"king"}, {t:"日常・コメディ", p:"light"}] },
+        { q: "決断を下す時の基準は？", a: [{t:"自分の直感", p:"fire"}, {t:"過去のデータと経験", p:"smart"}, {t:"周りの意見", p:"friend"}, {t:"道徳や正義感", p:"law"}, {t:"その時の気分", p:"chaos"}] },
+        { q: "人生のゴールとして近いのは？", a: [{t:"世界一の成功者", p:"king"}, {t:"穏やかで平和な暮らし", p:"holy"}, {t:"誰にも縛られない自由", p:"chaos"}, {t:"自分の道を極める", p:"pride"}, {t:"歴史に名を残す", p:"law"}] },
+        { q: "身の回りのファッションは？", a: [{t:"清潔感重視のシンプル", p:"cool"}, {t:"トレンドを取り入れた派手め", p:"light"}, {t:"機能性重視", p:"smart"}, {t:"個性が強すぎるスタイル", p:"chaos"}, {t:"黒を基調としたシック", p:"dark"}] },
+        { q: "人付き合いで一番疲れることは？", a: [{t:"建前ばかりの会話", p:"pride"}, {t:"大人数での騒ぎ", p:"dark"}, {t:"細かいルールや縛り", p:"chaos"}, {t:"沈黙が続くこと", p:"light"}, {t:"感情的なぶつかり合い", p:"cool"}] },
+        { q: "最後に。どんな二つ名が欲しい？", a: [{t:"強そうな【漢字】", p:"kanji"}, {t:"厨二病な【漢字＋カナ】", p:"mix"}, {t:"異世界的な【カタカナ】", p:"katakana"}, {t:"神々しい【英語風】", p:"english"}, {t:"おまかせ", p:"chaos"}] }
     ];
 
     let current = 0;
@@ -52,7 +52,7 @@
 
     function start() {
         current = 0;
-        scores = { fire:0, cool:0, dark:0, light:0, holy:0, smart:0, chaos:0, law:0, warrior:0, shadow:0, king:0, pride:0, kanji:0, mix:0 };
+        scores = { fire:0, cool:0, dark:0, light:0, holy:0, smart:0, chaos:0, law:0, warrior:0, shadow:0, king:0, pride:0, friend:0, kanji:0, mix:0, katakana:0, english:0 };
         nextStep();
     }
 
@@ -60,10 +60,11 @@
         if (point) scores[point]++;
         if (current < questions.length) {
             const q = questions[current];
+            const progress = (current / questions.length) * 100;
             document.getElementById('display-area').innerHTML = `
-                <div id="progress">${current + 1} / 15</div>
+                <div id="progress-bar"><div id="progress-fill" style="width:${progress}%"></div></div>
                 <p id="question-text">${q.q}</p>
-                <div class="btn-grid" id="btn-area"></div>
+                <div class="btn-column" id="btn-area"></div>
             `;
             q.a.forEach(ans => {
                 const b = document.createElement('button');
@@ -77,33 +78,37 @@
     }
 
     function showResult() {
-        const keys = Object.keys(scores).filter(k => k !== 'mix' && k !== 'kanji');
+        const keys = ["fire","cool","dark","light","holy","smart","chaos","law","warrior","shadow","king","pride","friend"];
         const topType = keys.reduce((a, b) => scores[a] >= scores[b] ? a : b);
 
-        const dictionary = {
-            fire: { p:["紅蓮の", "爆炎の", "焦熱の", "焔の"], k:"猛虎", m:"プロメテウス", d:"内なる情熱を力に変え、周囲を巻き込む圧倒的なエネルギーを持つ者。" },
-            cool: { p:["凍てつく", "氷結の", "零度の", "冷徹なる"], k:"蒼狼", m:"ジャックフロスト", d:"常に冷静さを失わず、最小の力で最大の成果を出す効率の追求者。" },
-            dark: { p:["深淵の", "宵闇の", "漆黒の", "奈落の"], k:"隠者", m:"シャドウウォーカー", d:"一人の時間を愛し、影から世の中を観察するミステリアスな存在。" },
-            light: { p:["閃光の", "黄金の", "暁の", "眩き"], k:"光翼", m:"ルシフェル", d:"周囲を明るく照らし、自然と人が集まってくる天性のカリスマ。" },
-            holy: { p:["慈愛の", "聖なる", "救済の", "福音の"], k:"聖者", m:"メサイア", d:"高い共感力を持ち、他者のために自己を捧げることができる高潔な魂。" },
-            smart: { p:["深慮の", "真理の", "虚構の", "智識の"], k:"賢者", m:"マスターマインド", d:"知識を武器に、複雑な現代社会の構造を読み解く戦略家。" },
-            chaos: { p:["変幻の", "狂乱の", "不規則な", "終焉の"], k:"道化師", m:"アナーキスト", d:"既存のルールに縛られず、自由奔放に生きる新しい時代の開拓者。" },
-            law: { p:["断罪の", "秩序の", "粛清の", "鉄格子の"], k:"執行官", m:"ジャッジメント", d:"規律を重んじ、正義と平穏を守るために戦う堅実な守護者。" },
-            warrior: { p:["不滅の", "鉄血の", "無双の", "不倒の"], k:"武人", m:"バーサーカー", d:"立ち止まることを知らず、常に挑戦し続ける不屈の精神の持ち主。" },
-            shadow: { p:["朧月の", "姿なき", "幻影の", "一閃の"], k:"刺客", m:"アサシン", d:"目立つことを嫌い、裏方として完璧な仕事をこなすプロフェッショナル。" },
-            king: { p:["覇道の", "至高の", "支配の", "王冠なき"], k:"皇帝", m:"オーバーロード", d:"高い野心を持ち、自分だけの帝国（理想）を築き上げる指導者。" },
-            pride: { p:["孤高の", "気高き", "誇り高き", "不屈の"], k:"騎士", m:"ガーディアン", d:"自分自身の信念を何よりも大切にし、決して自分に嘘をつかない者。" }
+        const dict = {
+            fire: { p:["焦土の", "猛炎の", "爆走の", "一撃の"], kanji:"熱血漢", mix:"焔のバーサーカー", katakana:"プロメテウス", english:"Blaze Heart", d:"溢れ出るパッションを武器に、目の前の壁を粉砕して進む特攻型。" },
+            cool: { p:["氷結の", "静寂の", "絶対零度の", "無感の"], kanji:"冷徹者", mix:"氷のインテリジェンス", katakana:"ジャックフロスト", english:"Absolute Zero", d:"感情に流されず、常に最適解を導き出すクールな実力派。" },
+            dark: { p:["深淵の", "宵闇の", "奈落の", "孤影の"], kanji:"隠遁者", mix:"影のストレンジャー", katakana:"ファントム", english:"Night Walker", d:"一人の時間を力に変え、独自の視点で世界を俯瞰するミステリアスな存在。" },
+            light: { p:["眩き", "閃光の", "黄金の", "希望の"], kanji:"陽光主", mix:"光のトリックスター", katakana:"アポロン", english:"Bright Star", d:"周囲を巻き込み、場を盛り上げる天性のムードメーカー。" },
+            holy: { p:["慈愛の", "聖なる", "救済の", "白銀の"], kanji:"聖者", mix:"天の福音（メサイア）", katakana:"サンクチュアリ", english:"Guardian Angel", d:"深い優しさで他者を包み込み、心の平穏をもたらす癒やしの体現者。" },
+            smart: { p:["真理の", "智略の", "虚構の", "神眼の"], kanji:"軍師", mix:"思考のデウス・エクス・マキナ", katakana:"プロフェッサー", english:"Logic Master", d:"膨大な知識を統合し、未来を予測して行動する現代の賢者。" },
+            chaos: { p:["狂乱の", "不規則な", "終焉の", "気まぐれな"], kanji:"道化", mix:"混沌のアナーキスト", katakana:"ジョーカー", english:"Chaos Theory", d:"予測不能な行動で退屈を破壊する、自由を愛する革命児。" },
+            law: { p:["断罪の", "粛清の", "鉄槌の", "規律の"], kanji:"執行人", mix:"法のジャッジメント", katakana:"ガーディアン", english:"Iron Justice", d:"自分にも他人にも厳しく、正義を貫こうとするストイックな守護者。" },
+            warrior: { p:["不滅の", "鉄血の", "無双の", "剛力の"], kanji:"武神", mix:"不屈のグラディエーター", katakana:"ウォーリアー", english:"The Immortal", d:"困難を真正面から受け止め、何度でも立ち上がる不撓不屈の闘志を持つ。" },
+            shadow: { p:["姿なき", "幻影の", "朧月の", "一閃の"], kanji:"刺客", mix:"宵闇のアサシン", katakana:"ステルス", english:"Hidden Blade", d:"目立つことを避け、裏方で完璧に物事を遂行する凄腕のプロ。" },
+            king: { p:["覇道の", "支配の", "王権の", "高貴なる"], kanji:"皇帝", mix:"至高のオーバーロード", katakana:"レガリア", english:"Crown King", d:"高い目標を掲げ、周囲を率いて理想の実現へと突き進むカリスマ。" },
+            pride: { p:["孤高の", "気高き", "誇り高き", "独立の"], kanji:"騎士", mix:"誇り高きロンリーウルフ", katakana:"エクスキャリバー", english:"Noble Soul", d:"何者にも魂を売らず、己の美学のみを信じて生きる高潔な者。" },
+            friend: { p:["絆の", "共鳴の", "連帯の", "和合の"], kanji:"相棒", mix:"友情のブレイブハート", katakana:"コネクター", english:"Trust Linker", d:"チームの調和を最も大切にし、人との繋がりで奇跡を起こすタイプ。" }
         };
 
-        const res = dictionary[topType];
+        const res = dict[topType];
         const prefix = res.p[Math.floor(Math.random() * res.p.length)];
-        const suffix = (scores['mix'] > scores['kanji']) ? res.m : res.k;
+        let suffix = res.kanji;
+        if (scores['mix'] > 0) suffix = res.mix;
+        if (scores['katakana'] > 0) suffix = res.katakana;
+        if (scores['english'] > 0) suffix = res.english;
 
         document.getElementById('display-area').innerHTML = `
-            <div class="result-sub">THE AWAKENED</div>
+            <div style="font-size:14px; color:#d4af37;">YOUR SOUL REVEALED</div>
             <div class="result-main">【 ${prefix}${suffix} 】</div>
-            <div class="result-desc">${res.desc || res.d}</div>
-            <button onclick="location.reload()" style="margin-top:40px; background:#222; color:#fff; width:200px;">再醒する</button>
+            <div class="result-desc"><b>診断結果：</b><br>${res.d}</div>
+            <button onclick="location.reload()" style="margin-top:40px; background:#222; color:#fff; width:200px;">再び魂を問う</button>
         `;
     }
 </script>
